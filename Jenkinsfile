@@ -7,10 +7,25 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Hello') {
+        stage('Build') {
             steps {
-                echo 'Hello from a Jenkinsfile stored in Git!'
-                echo 'This change is tracked in git history!'
+                echo "Building branch ${env.BRANCH_NAME}"
+            }
+        }
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Deploying from main...'
+            }
+        }
+        stage('Lint / Extra Checks') {
+            when {
+                branch pattern: "feature/.*", comparator: "REGEXP"
+            }
+            steps {
+                echo 'Running extra checks on feature branch...'
             }
         }
     }
