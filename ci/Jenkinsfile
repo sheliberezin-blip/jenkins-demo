@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'TARGET', choices: ['app-a', 'app-b'], description: 'Which component to build')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build app-a') {
+            when {
+                expression { params.TARGET == 'app-a' }
+            }
+            steps {
+                echo 'Building app-a...'
+            }
+        }
+        stage('Build app-b') {
+            when {
+                expression { params.TARGET == 'app-b' }
+            }
+            steps {
+                echo 'Building app-b...'
+            }
+        }
+    }
+}
